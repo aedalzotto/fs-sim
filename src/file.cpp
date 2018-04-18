@@ -6,7 +6,7 @@ FSParser::FSParser()
 
 }
 
-void FSParser::open_list(std::string file_name)
+void FSParser::load_fat(std::string file_name)
 {
     memory.clear();
     std::fstream file;
@@ -14,6 +14,10 @@ void FSParser::open_list(std::string file_name)
     file.open(file_name, std::fstream::in);
     if(!file.is_open())
         throw std::runtime_error("Unable to open list.");
+
+    
+    //Evita ler header
+    file.ignore ( 102, '2' );
 
     std::string buffer;
     std::vector<std::string> buffer_split;
@@ -27,22 +31,17 @@ void FSParser::open_list(std::string file_name)
 
         buffer_split.clear();
         buffer_split = explode(buffer, '	');
+
         if(buffer_split.size() != 2){
             file.close();
             throw std::runtime_error("Número de colunas inválido.");
         }
 
-        //Evita ler header
         inputs.clear();
         unsigned int value;
         for(auto& s : buffer_split){
-            if(isInteger(s)){
-                std::istringstream(s) >> value;
-                inputs.push_back(value);
-            }else{
-                inputs.clear();
-                break;
-            }
+            std::istringstream(s) >> value;
+            inputs.push_back(value);    
         }
 
         if(inputs.size() == 2)
@@ -55,7 +54,7 @@ void FSParser::open_list(std::string file_name)
     file.close();
 }
 
-void FSParser::open_task(std::string file_name)
+void FSParser::load_job(std::string file_name)
 {
     task.clear();
     std::fstream file;
@@ -102,7 +101,7 @@ void FSParser::open_task(std::string file_name)
     file.close();
 }
 
-const std::vector<std::string> fssim_parFSParserser::explode(const std::string& s, const char& c)
+const std::vector<std::string> FSParser::explode(const std::string& s, const char& c)
 {
     std::string buff{""};
     std::vector<std::string> v;
@@ -117,20 +116,10 @@ const std::vector<std::string> fssim_parFSParserser::explode(const std::string& 
     return v;
 }
 
-bool FSParser::isInteger(const std::string &s)
-{
-    if(s.empty() || ((!isdigit(s[0])) && (s[0] != '-') && (s[0] != '+'))) return false ;
-
-    char * p ;
-    strtol(s.c_str(), &p, 10) ;
-
-    return (*p == 0);
-}
-
 mem_list::mem_list(unsigned int id, unsigned int size)
 {
     this->id = id;
-    available = size;
+    
 }
 
 jobs::jobs(unsigned int id, unsigned int size)

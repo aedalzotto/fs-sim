@@ -10,28 +10,21 @@ class mem_list {
 public:
     mem_list(unsigned int id, unsigned int size);
     unsigned int id;
-    unsigned int available;
 };
 
-class jobs {
-public:
-    jobs(unsigned int id, unsigned int size);
-    unsigned int id;
-    unsigned int size;
-};
 
-class mmalgo_parser {
+class FSParser {
 public:
-    mmalgo_parser();
-    void open_list(std::string file_name);
-    void open_task(std::string file_name);
+    FSParser();
+    void load_fat(std::string file_name);
+    void load_job(std::string file_name);
 
     unsigned int get_list_number();
     unsigned int get_task_number();
     const std::vector<std::string> explode(const std::string& s, const char& c);
 
-    std::vector<mem_list> memory;
-    std::vector<jobs> task;
+    std::vector<mem_list> fat;
+    std::vector<jobs> job;
 
 private:
     
