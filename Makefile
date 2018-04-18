@@ -15,6 +15,7 @@ SRCEXT := cpp
 SOURCES := $(wildcard $(SRCDIR)/*.$(SRCEXT))
 OBJECTS := $(addprefix $(BUILDDIR)/,$(notdir $(SOURCES:.$(SRCEXT)=.o)))
 CFLAGS := -g -Wall
+LDFLAGS := -lcurses
 INCLUDES := -I./$(SRCDIR)/include
 
 all: $(TARGET)
@@ -28,7 +29,7 @@ run:
 $(TARGET): $(OBJECTS)
 	@echo "Linking..."
 	@$(MK) -p $(EXECDIR)
-	$(CC) $^ -o $(TARGET)
+	$(CC) $^ -o $(TARGET) $(LDFLAGS)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	@echo "Compiling $<"
