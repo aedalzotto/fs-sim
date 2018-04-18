@@ -1,0 +1,14 @@
+Lista de processos e quais arquivos cada processo utiliza ao longo de sua execução
+Estrutura:
+	id_proc	array_arqs
+
+Processos:
+0	[A1, A0]
+1	[A2, A1]
+2	[A1, A2, A3]
+3	[A0, A3]
+4	[A1]
+5	[A3, A2]
+6	[A0]
+7	[A1]
+8	[A3, A2, A0, A1]

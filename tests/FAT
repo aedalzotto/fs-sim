@@ -1,0 +1,22 @@
+Tabela FAT com alocação de arquivos em disco (por bloco)
+Estrutura:
+	id_fat	prox_bloco
+
+Dados:
+0	x
+1	x
+2	4
+3	EOF
+4	3
+5	EOF
+6	15
+7	16
+8	EOF
+9	FREE
+10	FREE
+11	FREE
+12	8
+13	5
+14	EOF
+15	14
+16	13
