@@ -8,7 +8,7 @@ FSParser::FSParser()
 
 void FSParser::load_fat(std::string file_name)
 {
-    fat.clear();
+    disk.clear();
     std::fstream file;
 
     file.open(file_name, std::fstream::in);
@@ -46,7 +46,7 @@ void FSParser::load_fat(std::string file_name)
 
 void FSParser::load_job(std::string file_name)
 {
-    job.clear();
+    jobs.clear();
     std::fstream file;
 
     file.open(file_name, std::fstream::in);
