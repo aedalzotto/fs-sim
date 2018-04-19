@@ -6,12 +6,19 @@
 #include <string>
 #include <fstream>
 
-class mem_list {
+class fat {
 public:
-    mem_list(unsigned int id, unsigned int size);
+    fat(unsigned int id, std::string next);
     unsigned int id;
+    std::string next;
 };
 
+class job {
+public:
+    job(unsigned int id, std::string arcs);
+    unsigned int id;
+    std::string arcs;
+};
 
 class FSParser {
 public:
@@ -23,8 +30,8 @@ public:
     unsigned int get_task_number();
     const std::vector<std::string> explode(const std::string& s, const char& c);
 
-    std::vector<mem_list> fat;
-    std::vector<jobs> job;
+    std::vector<fat> disk;
+    std::vector<job> jobs;
 
 private:
     
