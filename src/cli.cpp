@@ -66,16 +66,20 @@ int FSCli::main_menu()
 
 void FSCli::run_program()
 {
+    simulator.load_physical(parser.get_disk(), parser.get_jobs());
     while(program_menu()){
         switch(last_prog_opt){
         case FS_PROG_CACHED:
-            //simulate(true);
+            //simulator.run(true);
             break;
         case FS_PROG_UNCACHED:
-            //simulate(false);
+            simulate(false);
             break;
         case FS_PROG_DEFRAG:
             //defrag_memory();
+            break;
+        case FS_PROG_RELOAD:
+            simulator.load_physical(parser.get_disk(), parser.get_jobs());
             break;
         default:
             std::cout << "Invalid option!" << std::endl;
@@ -89,14 +93,15 @@ int FSCli::program_menu()
 {
     Terminal::clear();
     std::cout << "FS Simulator Program" << std::endl;
-    std::cout << "FAT file selected: " << "None" << std::endl; //Alterar com nome do arquivo
-    std::cout << "Process file selected: " << "None" << std::endl; //Alterar com nome do arquivo
+    std::cout << "FAT file selected: " << fat_filename << std::endl;
+    std::cout << "Process file selected: " << job_filename << std::endl;
     std::cout << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << "0 - Main menu" << std::endl;
     std::cout << "1 - Run cached simulation" << std::endl;
     std::cout << "2 - Run uncached simulation" << std::endl;
     std::cout << "3 - Run defragmentation" << std::endl;
+    std::cout << "4 - Reload files to remove modifications" << std::endl;
     std::cout << std::endl;
     std::cout << "Option: ";
     std::cin >> last_prog_opt;
@@ -111,12 +116,13 @@ void FSCli::select_fat()
     std::cout << "Path: ";
     std::cin >> fat_filename;
     try {
-        //parser.load_fat(fat_filename);
+        parser.load_fat(fat_filename);
         fat_loaded = true;
     } catch(const std::runtime_error& ex){
         std::cerr << "Error: " << ex.what();
         fat_loaded = false;
     }
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));    
 }
 
 void FSCli::select_job()
@@ -127,16 +133,24 @@ void FSCli::select_job()
     std::cout << "Path: ";
     std::cin >> job_filename;
     try {
-        //parser.load_job(job_filename);
+        parser.load_job(job_filename);
         job_loaded = true;
     } catch(const std::runtime_error& ex){
         std::cerr << "Error: " << ex.what();
         job_loaded = false;
     }
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 }
 
 void FSCli::simulate(bool cached)
 {
-    //Mostra lista encadeada de cada arquivo conforme fat.
+    Terminal::clear();
+    //printar lista dos arquivos
+    if(cached)
+        return;
+    else
+        simulator.run_uncached();
     //show_files();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(5000));
 }

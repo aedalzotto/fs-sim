@@ -5,6 +5,8 @@
 #include <chrono>
 #include <thread>
 #include "term_utils.h"
+#include "file.h"
+#include "simulator.h"
 
 class FSCli {
 public:
@@ -23,11 +25,12 @@ private:
         FS_PROG_BACK,
         FS_PROG_CACHED,
         FS_PROG_UNCACHED,
-        FS_PROG_DEFRAG
+        FS_PROG_DEFRAG,
+        FS_PROG_RELOAD
     };
 
-    //FSParser parser;
-    //FSSimulator simulator;
+    FSParser parser;
+    FSSimulator simulator;
 
     std::string fat_filename;
     std::string job_filename;

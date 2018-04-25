@@ -1,5 +1,4 @@
 #include "file.h"
-#include <sstream>
 
 FSParser::FSParser()
 {
@@ -16,29 +15,39 @@ void FSParser::load_fat(std::string file_name)
         throw std::runtime_error("Unable to open list.");
     
     //Evita ler header
-    file.ignore ( 102, '2' );
+    file.ignore(104);
 
     std::string buffer;
     std::vector<std::string> buffer_split;
+    long int buf_next;
 
     while(!file.eof()){
         std::getline(file, buffer);
-
+        
         if(!buffer.size())
             break;
 
         buffer_split.clear();
-        buffer_split = explode(buffer, '	');
+        buffer_split = explode(buffer, ' ');
 
         if(buffer_split.size() != 2){
             file.close();
             throw std::runtime_error("Número de colunas inválido.");
         }
-
         
-        disk.push_back(fat(buffer_split[0], buffer_split[1]));
-
+        if(!buffer_split[1].compare("EOF")){
+            buf_next = -1;
+        } else if(!buffer_split[1].compare("FREE")){
+            buf_next = -2;
+        } else if(!buffer_split[1].compare("BAD")){
+            buf_next = -3;
+        } else {
+            buf_next = std::stoi(buffer_split[1]);
+        }
+        
+        disk.map(std::stoi(buffer_split[0]), buf_next);
     }
+    
     buffer_split.clear();
     buffer.clear();
     file.close();
@@ -54,10 +63,13 @@ void FSParser::load_job(std::string file_name)
         throw std::runtime_error("Unable to open list.");
     
     //Evita ler header
-    file.ignore ( 125, '0' );
+    file.ignore(128);
 
     std::string buffer;
     std::vector<std::string> buffer_split;
+
+    std::vector<std::string> buffer_arcs;
+    std::vector<unsigned int> arc_ids;
 
     while(!file.eof()){
         std::getline(file, buffer);
@@ -66,19 +78,31 @@ void FSParser::load_job(std::string file_name)
             break;
 
         buffer_split.clear();
-        buffer_split = explode(buffer, '	');
+        buffer_arcs.clear();
+        arc_ids.clear();
+
+        buffer_split = explode(buffer, 0x09);
 
         if(buffer_split.size() != 2){
             file.close();
             throw std::runtime_error("Número de colunas inválido.");
         }
 
-        
-        jobs.push_back(job(buffer_split[0], buffer_split[1]));
+        remove_chars(buffer_split[1], "[],A");
+        buffer_arcs = explode(buffer_split[1], ' ');
+
+        for(auto& it : buffer_arcs){
+            arc_ids.push_back(std::stoi(it));
+        }
+
+        jobs.push_back(Job(std::stoi(buffer_split[0]), arc_ids));
 
     }
+
     buffer_split.clear();
     buffer.clear();
+    buffer_arcs.clear();
+    arc_ids.clear();
     file.close();
 }
 
@@ -97,23 +121,22 @@ const std::vector<std::string> FSParser::explode(const std::string& s, const cha
     return v;
 }
 
-fat::fat(unsigned int id, std::string next)
+/**
+ * 
+ */
+void FSParser::remove_chars(std::string &from, char *to_remove)
 {
-    this->id = id;
-    this->next = next;
+    for(unsigned int i = 0; i < strlen(to_remove); i++){
+        from.erase(std::remove(from.begin(), from.end(), to_remove[i]), from.end());
+    }
 }
 
-job::job(unsigned int id, std::string arcs)
+std::vector<Job> FSParser::get_jobs()
 {
-    this->id = id;
-    this->arcs = arcs;
+    return jobs;
 }
 
-unsigned int FSParser::get_jobs_number()
+Fat FSParser::get_disk()
 {
-    return jobs.size();
-}
-unsigned int FSParser::get_disk_size()
-{
-    return disk.size();
+    return disk;
 }
