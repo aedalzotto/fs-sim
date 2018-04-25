@@ -9,6 +9,7 @@
 class FSCli {
 public:
     FSCli();
+    ~FSCli() {}
     int run();
 
 private:
@@ -18,12 +19,31 @@ private:
         FS_OPT_SEL_JOB,
         FS_OPT_RUN_OPT
     };
+    enum prog_opts {
+        FS_PROG_BACK,
+        FS_PROG_CACHED,
+        FS_PROG_UNCACHED,
+        FS_PROG_DEFRAG
+    };
+
+    //FSParser parser;
+    //FSSimulator simulator;
+
+    std::string fat_filename;
+    std::string job_filename;
 
     int last_opt;
+    int last_prog_opt;
+
+    bool fat_loaded;
+    bool job_loaded;
 
     int main_menu();
     void select_fat();
     void select_job();
+    void run_program();
+    int program_menu();
+    void simulate(bool cached);
 };
 
 #endif
