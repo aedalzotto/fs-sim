@@ -26,7 +26,8 @@ private:
         FS_PROG_CACHED,
         FS_PROG_UNCACHED,
         FS_PROG_DEFRAG,
-        FS_PROG_RELOAD
+        FS_PROG_RELOAD,
+        FS_PROG_LIST
     };
 
     FSParser parser;

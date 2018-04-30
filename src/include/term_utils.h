@@ -3,10 +3,14 @@
 
 #include <unistd.h>
 #include <term.h>
+#include <cstdio>
+#include <sys/ioctl.h>
+
 
 class Terminal {
 public:
     static void clear();
+    static int kbhit();
 };
 
 #endif

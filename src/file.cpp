@@ -1,4 +1,5 @@
 #include "file.h"
+#include <iostream>
 
 FSParser::FSParser()
 {
@@ -15,7 +16,7 @@ void FSParser::load_fat(std::string file_name)
         throw std::runtime_error("Unable to open list.");
     
     //Evita ler header
-    file.ignore(104);
+    file.ignore(105);
 
     std::string buffer;
     std::vector<std::string> buffer_split;
@@ -23,12 +24,11 @@ void FSParser::load_fat(std::string file_name)
 
     while(!file.eof()){
         std::getline(file, buffer);
-        
         if(!buffer.size())
             break;
 
         buffer_split.clear();
-        buffer_split = explode(buffer, ' ');
+        buffer_split = explode(buffer, 0x09);
 
         if(buffer_split.size() != 2){
             file.close();
@@ -44,7 +44,7 @@ void FSParser::load_fat(std::string file_name)
         } else {
             buf_next = std::stoi(buffer_split[1]);
         }
-        
+        std::cout << std::stoi(buffer_split[0]) << " " << buf_next << std::endl;
         disk.map(std::stoi(buffer_split[0]), buf_next);
     }
     

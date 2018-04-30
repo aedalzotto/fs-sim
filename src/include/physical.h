@@ -14,6 +14,7 @@ public:
 
 private:
     std::map<unsigned int, long> fstable;
+    long find_previous(long actual);
 };
 
 class Job {

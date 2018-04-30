@@ -10,6 +10,7 @@ public:
     FSSimulator();
     void load_physical(Fat filesystem, std::vector<Job> joblist);
     void run_uncached();
+    void show_list();
 
 private:
     Fat filesystem;
