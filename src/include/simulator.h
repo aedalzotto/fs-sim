@@ -13,7 +13,7 @@ public:
     void run_uncached();
     void run_cached();
     void show_list();
-    void defrag();
+    void run_defrag();
 
 private:
     Fat filesystem;

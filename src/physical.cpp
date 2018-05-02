@@ -29,30 +29,7 @@ long Fat::find_previous(long actual)
 
 long Fat::get_first_block(unsigned int arc)
 {
-    long eof_count = -1;
-
-    auto it = fstable.begin();
-    for(; it != fstable.end(); ++it){
-        if(it->second == -1){
-            eof_count++;
-            if(eof_count == arc){
-                break;
-            }
-        }
-    }
-
-    if(it == fstable.end())
-        return -1;
-
-    unsigned int first;
-    long found = it->first;
-    do {
-        first = found;
-        found = find_previous(first);
-    } while(found != -1);
-
-    return first;
-
+    return get_first_from_eof(get_last(arc));
 }
 
 long Fat::get_next(unsigned int block)
@@ -124,3 +101,33 @@ unsigned int Cache::get_size()
     return cache.size();
 }
 
+long Fat::get_last(unsigned int arc)
+{
+    long eof_count = -1;
+
+    auto it = fstable.begin();
+    for(; it != fstable.end(); ++it){
+        if(it->second == -1){
+            eof_count++;
+            if(eof_count == arc){
+                break;
+            }
+        }
+    }
+
+    if(it == fstable.end())
+        return -1;
+
+    return it->first;
+}
+
+long get_first_from_eof(unsigned int block)
+{
+    unsigned int first = -1;
+    while(block != -1){
+        first = block;
+        block = find_previous(first);
+    }
+
+    return first;
+}

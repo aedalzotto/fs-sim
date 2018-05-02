@@ -11,6 +11,8 @@ public:
     void map(unsigned int id, long next);
     long get_first_block(unsigned int block);
     long get_next(unsigned int block);
+    long get_last(unsigned int arc);
+    long get_first_from_eof(unsigned int block);
 
 private:
     std::map<unsigned int, long> fstable;
