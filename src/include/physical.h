@@ -28,4 +28,17 @@ private:
     std::vector<unsigned int> arcs;
 };
 
+class Cache{
+public:
+    Cache(unsigned int maxSize);
+    bool get(unsigned int id);
+    void clear();
+    
+private:
+    std::vector<std::pair<unsigned int, unsigned int> > cache;
+    unsigned int maxSize;
+
+    void add(unsigned int block);
+};
+
 #endif

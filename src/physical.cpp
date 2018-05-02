@@ -1,5 +1,6 @@
 #include "physical.h"
 #include <iostream>
+#include <algorithm>
 
 Fat::Fat()
 {
@@ -74,3 +75,43 @@ std::vector<unsigned int> Job::get_arcs()
 {
     return arcs;
 }
+
+Cache::Cache(unsigned int maxSize){
+    this->maxSize = maxSize;
+}
+
+void Cache::add(unsigned int id)
+{
+    if(cache.size() == maxSize){
+        auto max = cache.begin();
+        for(auto it = max; it != cache.end(); ++it){
+            if(it->second > max->second){
+                max = it;
+            }
+        }
+        cache.erase(max);
+    }
+ 
+    cache.emplace_back(id, 0);
+}
+
+void Cache::clear()
+{
+    cache.clear();
+}
+
+bool Cache::get(unsigned int id)
+{   
+    bool found = false;
+    for(auto &it : cache){
+        it.second++;
+        if(it.first == id){
+            found = true;
+            it.second = 0;
+        }
+    }
+    if(!found) add(id);
+    return found;
+}
+
+
