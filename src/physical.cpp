@@ -115,19 +115,57 @@ long Fat::get_last(unsigned int arc)
         }
     }
 
-    if(it == fstable.end())
+    if(eof_count != arc)
         return -1;
 
     return it->first;
 }
 
-long get_first_from_eof(unsigned int block)
+long Fat::get_first_from_eof(long arc)
 {
-    unsigned int first = -1;
-    while(block != -1){
-        first = block;
-        block = find_previous(first);
+    long first = -1;
+    while(arc != -1){
+        first = arc;
+        arc = find_previous(first);
     }
 
     return first;
+}
+
+void Fat::swap_blocks(unsigned int block, unsigned int place)
+{
+    long aux = fstable[place];
+    fstable[place] = block;
+    fstable[block] = aux;
+}
+
+long Fat::get_free()
+{
+    for(auto it = fstable.begin();; it != fstable.end(); ++it){
+        if(it->second == -2){
+            return it->first;
+        }
+    }
+    return -1;
+}
+
+void Fat::defrag()
+{
+    std::vector<unsigned int> last_block;
+    unsigned int file = 0;
+    auto last = get_last(file);
+
+    while(last != -1){
+        last_block.push_back(last);
+        file++;
+        last = get_last(file);
+    }
+
+    unsigned int count = 2;
+    for(int i = 0; i < last_block.size(); i++){
+        long next = get_first_from_eof(last_block[i]);
+        while(next != -1){
+            
+        }       
+    }
 }

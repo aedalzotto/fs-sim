@@ -9,14 +9,19 @@ public:
     Fat();
     void clear();
     void map(unsigned int id, long next);
-    long get_first_block(unsigned int block);
+    long get_first_block(unsigned int arc);
     long get_next(unsigned int block);
     long get_last(unsigned int arc);
-    long get_first_from_eof(unsigned int block);
+    long get_first_from_eof(long arc);
+    void swap_blocks(unsigned int block, unsigned int place);
+    void defrag();
+    
 
 private:
     std::map<unsigned int, long> fstable;
     long find_previous(long actual);
+    long get_free();
+    long get_previous(unsigned int count);
 };
 
 class Job {

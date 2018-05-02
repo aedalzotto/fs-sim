@@ -1,4 +1,5 @@
 #include "simulator.h"
+#include "term_utils.h"
 
 FSSimulator::FSSimulator() : 
 cache(32)
@@ -99,30 +100,7 @@ void FSSimulator::run_defrag()
 {
     std::cout << "Defrag" << std::endl << std::endl;
 
-    std::vector<unsigned int> last_block;
-    unsigned int file = 0;
-    long last = filesystem.get_last(file);
-    while(last >= 0){
-        last_block.push_back(last);
-        file++;
-        last = filesystem.get_last(file);
-    }
-
-    file = 0;
-    unsigned int count = 2;
-    long first = filesystem.get_first_from_eof(last_block[file]);
-    while(first >= 0){
-        filesystem.swap_blocks(first, count);
-        count++;
-        first = filesystem.get_next(first);
-        while(first != -1) {            
-            first = filesystem.get_next(first);
-            count++;
-        }
-        std::cout << std::endl;
-        file++;
-        first = filesystem.get_first_from_eof(last_block[file]);
-    }
+    filesystem.defrag();
 }
 
 void FSSimulator::show_list()

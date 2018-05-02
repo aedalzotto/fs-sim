@@ -76,7 +76,9 @@ void FSCli::run_program()
             simulate(false);
             break;
         case FS_PROG_DEFRAG:
-            //defrag_memory();
+            simulator.run_defrag();
+            std::cout << "CABO ESSE CU" << std::endl;
+            Terminal::kbhit();
             break;
         case FS_PROG_RELOAD:
             simulator.load_physical(parser.get_disk(), parser.get_jobs());
