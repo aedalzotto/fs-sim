@@ -163,9 +163,9 @@ void Fat::defrag()
 
     unsigned int count = 2;
     for(int i = 0; i < last_block.size(); i++){
-        long next = get_first_from_eof(last_block[i]);
-        while(next != -1){
-            
-        }       
+        long current = get_first_from_eof(last_block[i]);
+        while(current != -1){
+            long free_id = get_free();
+        }
     }
 }
