@@ -70,7 +70,7 @@ void FSCli::run_program()
     while(program_menu()){
         switch(last_prog_opt){
         case FS_PROG_CACHED:
-            //simulator.run(true);
+            simulate(true);
             break;
         case FS_PROG_UNCACHED:
             simulate(false);
@@ -82,6 +82,7 @@ void FSCli::run_program()
             simulator.load_physical(parser.get_disk(), parser.get_jobs());
             break;
         case FS_PROG_LIST:
+            Terminal::clear();
             simulator.show_list();
             while(!Terminal::kbhit());
             break;
@@ -152,7 +153,7 @@ void FSCli::simulate(bool cached)
     Terminal::clear();
 
     if(cached)
-        return;
+        simulator.run_cached();
     else
         simulator.run_uncached();
 

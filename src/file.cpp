@@ -1,5 +1,4 @@
 #include "file.h"
-#include <iostream>
 
 FSParser::FSParser()
 {
@@ -44,7 +43,7 @@ void FSParser::load_fat(std::string file_name)
         } else {
             buf_next = std::stoi(buffer_split[1]);
         }
-        std::cout << std::stoi(buffer_split[0]) << " " << buf_next << std::endl;
+
         disk.map(std::stoi(buffer_split[0]), buf_next);
     }
     

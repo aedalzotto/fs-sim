@@ -77,6 +77,7 @@ void FSSimulator::run_cached()
 
 void FSSimulator::show_list()
 {
+    std::cout << "File list" << std::endl << std::endl;
     unsigned int file = 0;
     long first = filesystem.get_first_block(file);
     while(first >= 0){
