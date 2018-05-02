@@ -114,4 +114,13 @@ bool Cache::get(unsigned int id)
     return found;
 }
 
+unsigned int Cache::get_block(unsigned int position)
+{
+    return cache[position].first;
+}
+
+unsigned int Cache::get_size()
+{
+    return cache.size();
+}
 

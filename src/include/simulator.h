@@ -2,6 +2,7 @@
 #define FSSIM_SIM_H_
 
 #include <iostream>
+#include <algorithm>
 
 #include "physical.h"
 

@@ -33,6 +33,8 @@ public:
     Cache(unsigned int maxSize);
     bool get(unsigned int id);
     void clear();
+    unsigned int get_block(unsigned int position);
+    unsigned int get_size();
     
 private:
     std::vector<std::pair<unsigned int, unsigned int> > cache;
