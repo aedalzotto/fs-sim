@@ -21,7 +21,6 @@ private:
     std::map<unsigned int, long> fstable;
     long find_previous(long actual);
     long get_free();
-    long get_previous(unsigned int count);
 };
 
 class Job {

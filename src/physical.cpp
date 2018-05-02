@@ -141,7 +141,7 @@ void Fat::swap_blocks(unsigned int block, unsigned int place)
 
 long Fat::get_free()
 {
-    for(auto it = fstable.begin();; it != fstable.end(); ++it){
+    for(auto it = fstable.begin(); it != fstable.end(); ++it){
         if(it->second == -2){
             return it->first;
         }
@@ -165,7 +165,34 @@ void Fat::defrag()
     for(int i = 0; i < last_block.size(); i++){
         long current = get_first_from_eof(last_block[i]);
         while(current != -1){
+            if(count == current){
+                count++;
+                current = get_next(current);
+                continue;
+            }
             long free_id = get_free();
+            if(free_id < 0)
+                return;
+            long prev_cnt = find_previous(count);
+            long prev_mvd = find_previous(current);
+            fstable[free_id] = fstable[count];
+            fstable[count] = -2;
+            if(get_next(count) == -1){
+                auto it = std::find(last_block.begin(), last_block.end(), count);
+                *it = free_id;
+            }
+            if(prev_cnt != -1)
+                fstable[prev_cnt] = free_id;
+            fstable[count] = fstable[current];
+            fstable[current] = -2;
+            if(get_next(current) == -1){
+                auto it = std::find(last_block.begin(), last_block.end(), current);
+                *it = count;
+            }
+            if(prev_mvd != -1)
+                fstable[prev_mvd] = count;
+            current = get_next(count);
+            count++;
         }
     }
 }
