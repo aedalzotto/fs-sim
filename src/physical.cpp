@@ -175,20 +175,20 @@ void Fat::defrag()
                 return;
             long prev_cnt = find_previous(count);
             long prev_mvd = find_previous(current);
-            fstable[free_id] = fstable[count];
-            fstable[count] = -2;
             if(get_next(count) == -1){
                 auto it = std::find(last_block.begin(), last_block.end(), count);
                 *it = free_id;
             }
+            fstable[free_id] = fstable[count];
+            fstable[count] = -2;
             if(prev_cnt != -1)
                 fstable[prev_cnt] = free_id;
-            fstable[count] = fstable[current];
-            fstable[current] = -2;
             if(get_next(current) == -1){
                 auto it = std::find(last_block.begin(), last_block.end(), current);
                 *it = count;
             }
+            fstable[count] = fstable[current];
+            fstable[current] = -2;
             if(prev_mvd != -1)
                 fstable[prev_mvd] = count;
             current = get_next(count);
