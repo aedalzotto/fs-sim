@@ -23,8 +23,8 @@ void FSSimulator::run_uncached()
             std::cout << "P" << it.get_id() << " precisa blocos de A" << it2 << std::endl;
             long first = filesystem.get_first_block(it2);
             if(first < 0){
-                std::cout << "Bloco não encontrado" << std::endl;
-                return;
+                std::cout << "Bloco não encontrado ou corrompido" << std::endl;
+                break;
             }
 
             do {
@@ -55,8 +55,8 @@ void FSSimulator::run_cached()
             std::cout << "P" << it.get_id() << " precisa blocos de A" << it2 << std::endl;
             long first = filesystem.get_first_block(it2);
             if(first < 0){
-                std::cout << "Bloco não encontrado" << std::endl;
-                return;
+                std::cout << "Bloco não encontrado ou corrompido" << std::endl;
+                break;
             }
 
             do {

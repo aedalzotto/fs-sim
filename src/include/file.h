@@ -21,6 +21,7 @@ public:
 private:
     const std::vector<std::string> explode(const std::string& s, const char& c);
     void remove_chars(std::string &from, char *to_remove);
+    bool isInteger(const std::string &s);
 
     Fat disk;
     std::vector<Job> jobs;

@@ -153,26 +153,34 @@ void Fat::defrag()
 {
     std::vector<unsigned int> last_block;
     unsigned int file = 0;
+
+    //Bloco que contem o EOF do A0
     auto last = get_last(file);
 
+    //Cria vector com posição dos EOF para manter a ordem dos arquivos!
     while(last != -1){
         last_block.push_back(last);
         file++;
         last = get_last(file);
     }
 
-    unsigned int count = 2;
+    unsigned int count = 2; //Primeiro bloco vai pra posição 2 (0 e 1 reservados)
     for(int i = 0; i < last_block.size(); i++){
-        long current = get_first_from_eof(last_block[i]);
-        while(current != -1){
-            if(count == current){
+        long current = get_first_from_eof(last_block[i]); //Pega primeiro bloco do arquivo 
+        while(current != -1){   //Se o arquivo está corrompido, será ignorado
+            while(fstable[count] == -3) //Pula os blocos ruins!
+                count++;
+
+            if(count == current){ //Se já está no lugar certo, ignora
                 count++;
                 current = get_next(current);
                 continue;
             }
+
             long free_id = get_free();
-            if(free_id < 0)
+            if(free_id < 0) //Se não há blocos livres, não há como desfragmentar
                 return;
+
             long prev_cnt = find_previous(count);
             long prev_mvd = find_previous(current);
             if(get_next(count) == -1){
